@@ -1,0 +1,24 @@
+@font-face {
+  font-family: Main;
+  src: url("./fonts/cloudveil_font.otf"); }
+.font {
+  font-family: Main; }
+
+.App {
+  padding: 0;
+  margin: 0; }
+
+html {
+  padding: 0;
+  margin: 0;
+  width: 100%; }
+
+.header {
+  background-color: #6D6D6D;
+  display: flex;
+  padding: 0;
+  margin: 0;
+  height: 15vh;
+  width: 100%; }
+
+/*# sourceMappingURL=app.css.map */
