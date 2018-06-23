@@ -4,7 +4,7 @@
   "description": "",
   "main": "./bluebirddesktopapp/mainelectron.js",
   "scripts": {
-    "start":"electron ."
+    "start":"electron . && cd bluebirddesktopapp && npm start"
   },
   "repository": {
     "type": "git",

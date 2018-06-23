@@ -8,8 +8,9 @@ mainWindow= new BrowserWindow({
     height:500,
     width:500
 })
+
+mainWindow.loadURL(`file://${__dirname}`)
 mainWindow.on('close',_=>{
-    console.log("closed");
     
     mainWindow=null
 })
