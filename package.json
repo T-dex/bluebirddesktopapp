@@ -2,9 +2,9 @@
   "name": "desktopapp",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "./bluebirddesktopapp/mainelectron.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start":"electron ."
   },
   "repository": {
     "type": "git",
@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/T-dex/bluebirddesktopapp/issues"
   },
-  "homepage": "https://github.com/T-dex/bluebirddesktopapp#readme"
+  "homepage": "https://github.com/T-dex/bluebirddesktopapp#readme",
+  "devDependencies": {
+    "electron-prebuilt": "^1.4.13"
+  }
 }
