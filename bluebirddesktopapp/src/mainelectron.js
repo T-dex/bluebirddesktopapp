@@ -3,6 +3,8 @@ const path=require('path');
 const app=electron.app;
 const BrowserWindow= electron.BrowserWindow;
 const { default: installExtension, REACT_DEVELOPER_TOOLS } = require('electron-devtools-installer');
+const ipc= electron.ipcMain
+
 
 
 
@@ -23,6 +25,7 @@ mainWindow.on('close',_=>{
     mainWindow=null
 })
 })
+
 app.on("window-all-closed",_=>{
     if(process.platform!=='darwin'){
         app.quit()

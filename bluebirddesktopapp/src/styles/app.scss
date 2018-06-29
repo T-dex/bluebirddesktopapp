@@ -31,3 +31,12 @@ html {
     height:15vh;
     width:100%;
 }
+.loginField{
+  height:1.1vh;
+  width:15vh;
+}
+.loginArea{
+  display: grid;
+  grid-template-rows: repeat(3,1fr);
+  grid-gap: 0;
+}
