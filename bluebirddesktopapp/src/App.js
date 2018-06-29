@@ -8,7 +8,7 @@ class App extends Component {
     super();
       this.state={
         production:{},
-        user:"",
+        user:null,
         uid:"",
       }
   }
@@ -16,8 +16,8 @@ class App extends Component {
     const rootRef=firebase.database().ref();
     const mainRef=rootRef.child('staging').child('users');
     mainRef.on('value', snap=>{
-      this.setState({production:snap.val()})
-    })
+      this.setState({production:snap.val()});
+    });
   }
   logIn(user){
     const email=user.email;
@@ -27,19 +27,24 @@ class App extends Component {
     .then(snapshot=>{
       const userCheck=Object.keys(this.state.production).filter(key=>{if(this.state.production[key].email==snapshot.user.email){
        if(this.state.production[key].access=="admin"){
-       return this.state.production[key]
-        };
+        const rootRef=firebase.database().ref();
+        const mainRef= rootRef.child('staging');
+        mainRef.on('value', snap=>{
+          this.setState({production:snap.val()});
+        });
+        this.setState({user:email, uid:snapshot.user.uid});   
+          
+       return this.state.production[key];
+        }
       }}
-      );
-      console.log(userCheck, this.state.production[userCheck]);
-      
-      
-      
+      ); 
     })
     .catch(error=>{
+      alert("You do not have access please contact admin");
+
       console.log("Failed");
       
-    })
+    });
     
     
 
@@ -47,7 +52,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <Header className="header" logIn={this.logIn.bind(this)}/>
+        <Header className="header" user={this.state.user} logIn={this.logIn.bind(this)}/>
       </div>
     );
   }

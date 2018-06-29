@@ -11,13 +11,13 @@ class Header extends Component {
   logIn(){
     const email= this.refs.email.value;
     const pass= this.refs.pass.value;
-    const user= {email, pass}
-    this.props.logIn(user)
+    const user= {email, pass};
+    this.props.logIn(user);
   }
   
   render() {
-    return (
-      <div className="header font">
+    if(this.props.user == null){
+      return (<div className="header font">
       <div>
         <form className="loginArea" onSubmit={(e)=>{this.logIn(), e.preventDefault();}}>
           <input className="loginField"type="text" placeholder="Email" ref="email"></input>
@@ -25,8 +25,16 @@ class Header extends Component {
           <button>Submit</button>
         </form>
        </div>
+      </div>)
+    }else{
+    return (
+      <div className="header font">
+      <div>
+       "Welcome Back"
+       </div>
       </div>
     );
+  }
   }
 }
 
