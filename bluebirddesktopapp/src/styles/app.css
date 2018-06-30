@@ -30,4 +30,8 @@ html {
   grid-template-rows: repeat(3, 1fr);
   grid-gap: 0; }
 
+.mainArea {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); }
+
 /*# sourceMappingURL=app.css.map */

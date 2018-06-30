@@ -5,7 +5,7 @@ import firebase,{auth} from './firebase/firebase';
 class Header extends Component {
   constructor(){
     super();
-    this.logIn=this.logIn.bind(this)
+    this.logIn=this.logIn.bind(this);
   }
 
   logIn(){
@@ -30,7 +30,7 @@ class Header extends Component {
     return (
       <div className="header font">
       <div>
-       "Welcome Back"
+       Welcome Back
        </div>
       </div>
     );

@@ -22,7 +22,7 @@ html {
     margin: 0;
     width: 100%;
   }
-
+//header style
 .header{
     background-color:$cloudveilGrey;
     display:flex;
@@ -39,4 +39,11 @@ html {
   display: grid;
   grid-template-rows: repeat(3,1fr);
   grid-gap: 0;
+}
+
+//main area style
+
+.mainArea{
+  display:grid;
+  grid-template-columns: repeat(2, 1fr)
 }
