@@ -43,8 +43,8 @@ class App extends Component {
         const mainRef= rootRef.child('staging')
         mainRef.on('value', snap=>{
           const app=snap.val()
-          const users={...app.users}
-          const days={...app.days}
+          const users={...app.users};
+          const days={...app.days};
           this.setState({production:{users:users,days:days}})
         })
         this.setState({user:email, uid:snapshot.user.uid})   
