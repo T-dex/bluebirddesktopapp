@@ -8,6 +8,14 @@ import UpdateUser from './components/updateUser'
 import NavBar from './components/navBar'
 import './styles/app.css'
 
+const date=  new Date();
+const month = date.getMonth()+1;
+const updatedMonth= month < 10 ? "0"+month : month
+const year = date.getFullYear();
+const day= date.getDate();
+const updatedDay=day < 10 ? "0"+ day : day
+const currentDate= year + "-"+updatedMonth+"-"+updatedDay;
+
 class App extends Component {
   constructor(){
     super() 
@@ -15,7 +23,8 @@ class App extends Component {
         production:{},
         user:null,
         uid:"",
-        page:null
+        page:null,
+        selectedPics:null
       }
   }
   componentDidMount(){
@@ -63,7 +72,24 @@ class App extends Component {
     this.setState({ page: newLandingPage })}
   }
   fileUpload=event=>{
-    console.log(event);
+    console.log(event.target.files[0].path);
+    this.setState({selectedPics:event.target.files[0]})
+   
+  }
+  pictureUpload=()=>{
+    const storageRef=firebase.storage().ref().child('staging')
+    const ref=storageRef.child('images');
+    console.log(storageRef, ref);
+    const file= this.state.selectedPics;
+    const task = ref.put(file).then(snapshot=>{
+      console.log(snapshot);
+      console.log("uploaded!");
+    })
+
+    // const fd = new FormData();
+    // fd.append('image', this.state.selectedPics, this.state.selectedPics.name)
+    // console.log(fd, newfd);
+    console.log(task);
     
   }
   render() {
@@ -90,7 +116,7 @@ class App extends Component {
     mainArea=(
       <div className="mainArea">
       <div>
-      <AddMedia fileUpload={this.fileUpload}/>
+      <AddMedia fileUpload={this.fileUpload} pictureUpload={this.pictureUpload} src={this.state.selectedPics}/>
       </div>
     </div> 
     )
