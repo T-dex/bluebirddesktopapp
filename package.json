@@ -18,7 +18,8 @@
   },
   "homepage": "https://github.com/T-dex/bluebirddesktopapp#readme",
   "devDependencies": {
-    "electron-prebuilt": "^1.4.13"
+    "electron-prebuilt": "^1.4.13",
+    "eslint-plugin-react": "^7.10.0"
   },
   "dependencies": {
     "concurrently": "^3.6.0",
