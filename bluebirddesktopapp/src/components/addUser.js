@@ -46,6 +46,10 @@ console.log(email, packages , trips);
         <option value= "gold">Gold</option>
         <option value= "silver">Silver</option>
         </select>
+        <select type="dropdown" ref="packages" >
+        <option value= "Access">Gold</option>
+        <option value= "silver">Silver</option>
+        </select>
         <button onClick={this.createNewUser}>Add New User</button>
     </div>
     
