@@ -1,5 +1,4 @@
 const functions = require('firebase-functions');
-
 const os= require('os');
 const path= require('path');
 const spawn = require('child-process-promise').spawn;
@@ -7,14 +6,7 @@ const cors= require('cors')({ origin: 'true' });
 const Busboy= require('busboy');
 const fs = require('fs')
 
-const gcconfig={
-    projectId:"bluebirdheli-dd1f5",
-    keyFilename:"bluebirdheli-dd1f5-firebase-adminsdk-p4eoa-969b971336.json"
-};
-const gcs =require('@google-cloud/storage')(gcconfig);
-// // Create and Deploy Your First Cloud Functions
-// // https://firebase.google.com/docs/functions/write-firebase-functions
-//
+
 exports.onFileChange = functions.storage.object().onFinalize(event => {
     const object= event;
     console.log(object, event);
