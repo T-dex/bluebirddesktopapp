@@ -1,0 +1,30 @@
+{
+  "name": "desktopapp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./bluebirddesktopapp/src/mainelectron.js",
+  "scripts": {
+    "start": "cd bluebirddesktopapp && npm start && npm run electron"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/T-dex/bluebirddesktopapp.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/T-dex/bluebirddesktopapp/issues"
+  },
+  "homepage": "https://github.com/T-dex/bluebirddesktopapp#readme",
+  "devDependencies": {
+    "electron-prebuilt": "^1.4.13",
+    "eslint-plugin-react": "^7.10.0"
+  },
+  "dependencies": {
+    "concurrently": "^3.6.0",
+    "jshint": "^2.9.5",
+    "uuid": "^3.3.2",
+    "wait-on": "^2.1.0"
+  }
+}

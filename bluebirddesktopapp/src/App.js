@@ -67,6 +67,10 @@ class App extends Component {
       console.log("Failed")
     });
   }
+  emptyFunction(newUserData){
+    console.log(newUserData);
+    
+  }
   userScreen({ newLandingPage }) {
     if(this.state.user!==null){
     this.setState({ page: newLandingPage })}
@@ -95,7 +99,7 @@ class App extends Component {
   render() {
   let mainArea;
   
-  if(this.state.user!==null && this.state.page===1){
+  if(this.state.user!==null && this.state.page===2){
     mainArea=(
       <div className="mainArea">
       <div>
@@ -105,11 +109,11 @@ class App extends Component {
       </div>
       </div>
     )
-  }else if( this.state.user!==null && this.state.page===2){
+  }else if( this.state.user!==null && this.state.page===1){
     mainArea=(
     <div className="mainArea">
       <div>
-      <AddUser/>
+      <AddUser emptyFunction={this.emptyFunction.bind(this)} />
       </div>
     </div>)
   }else if(this.state.user!==null && this.state.page===3){
