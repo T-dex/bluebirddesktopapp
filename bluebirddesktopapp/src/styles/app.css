@@ -52,4 +52,10 @@ html {
   .top-bar .navigation:hover {
     background-color: #D48C3C; }
 
+.userBlock {
+  border: 1px double black; }
+
+.day-counter {
+  display: flex; }
+
 /*# sourceMappingURL=app.css.map */

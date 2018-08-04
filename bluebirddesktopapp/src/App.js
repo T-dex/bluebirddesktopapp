@@ -8,11 +8,11 @@ import UpdateUser from './components/updateUser'
 import NavBar from './components/navBar'
 import './styles/app.css'
 
-const date=  new Date();
-const month = date.getMonth()+1;
-const updatedMonth= month < 10 ? "0"+month : month
-const year = date.getFullYear();
-const day= date.getDate();
+const date=  new Date()
+const month = date.getMonth()+1
+const updatedMonth= month < 10 ? '0'+month : month
+const year = date.getFullYear()
+const day= date.getDate()
 const updatedDay=day < 10 ? "0"+ day : day
 const currentDate= year + "-"+updatedMonth+"-"+updatedDay;
 
@@ -75,12 +75,12 @@ class App extends Component {
     if(this.state.user!==null){
     this.setState({ page: newLandingPage })}
   }
-  fileUpload=event=>{
+  fileUpload(event){
     console.log(event.target.files[0].path);
     this.setState({selectedPics:event.target.files[0]})
-   
+  
   }
-  pictureUpload=()=>{
+  pictureUpload(){
     const storageRef=firebase.storage().ref().child('staging')
     const ref=storageRef.child('images');
     console.log(storageRef, ref);
@@ -103,9 +103,7 @@ class App extends Component {
     mainArea=(
       <div className="mainArea">
       <div>
-        {Object.keys(this.state.production).map(key=>{
-          return <UpdateUser   key={key} users={this.state.production[key]}/>
-        })}
+       <UpdateUser users={this.state.production.users}/>
       </div>
       </div>
     )
