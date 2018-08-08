@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
-import { log } from 'util';
+import React, { Component } from 'react'
 
 
-let data;
+
+let data
 class UpdateUser extends Component{
     constructor(){
         super()
@@ -40,7 +40,7 @@ this.props.addUserDay(add)
        return(
          <div className="userBlock">
            <h2>{check[key].email}</h2>
-           <div className={check[key].access?"day-counter-admin":'day-counter'}><button onClick={this.removeDay} value={check[key].email}>&lt;</button><h4>{check[key].remainingTrips}</h4><button onClick={this.addDay} value={check[key].email}>&gt;</button></div>
+           <div className={check[key].access?'day-counter-admin':'day-counter'}><button onClick={this.removeDay} value={check[key].email}>&lt;</button><h4>{check[key].remainingTrips}</h4><button onClick={this.addDay} value={check[key].email}>&gt;</button></div>
         </div>
        )
      })

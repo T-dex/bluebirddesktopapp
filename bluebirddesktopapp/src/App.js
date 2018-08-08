@@ -105,6 +105,7 @@ class App extends Component {
    .catch(err=>console.log(err)
     )
   }
+
   removeUserDay=(remove)=>{
     const user= Object.keys(this.state.production.users).filter(key=>{
       if(key==remove){
@@ -124,12 +125,12 @@ class App extends Component {
            users:newUsers
          }
        }))
-       console.log(removeUsersDay, updatedUser);
-       
+       console.log(newUsers, updatedUser);
+       mainRef.child('users/').set(newUsers)
         return key
       }
     })
-
+    
     
   }
   addUserDay=(add)=>{
@@ -151,11 +152,10 @@ class App extends Component {
            users:newUsers
          }
        })) 
+       mainRef.child('users/').set(newUsers)  
         return key
       }
     })
-
-    
   }
   userScreen({ newLandingPage }) {
     if(this.state.user!==null){
