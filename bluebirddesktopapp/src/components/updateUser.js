@@ -6,35 +6,31 @@ let data;
 class UpdateUser extends Component{
     constructor(){
         super()
+        this.removeDay=this.removeDay.bind(this)
+        this.addDay=this.addDay.bind(this)
     }
 componentDidMount(){
 data=this.props.users
 }
-removeDay(event){
-  console.log(event.target.value);
-  console.log(data);
-  
+removeDay(event){  
 const remove= Object.keys(data).filter(key=>{
   if(data[key].email==event.target.value){
-    console.log("AWWW SHIT MOTHER FUCKA!!! YOU REMOVEDEDED");
     return data[key]
     
   }
 })
- console.log(remove);
- 
+ this.props.removeUserDay(remove)
 }
 
 addDay(event){
   const add= Object.keys(data).filter(key=>{
     if(data[key].email==event.target.value){
-      console.log("AWWW SHIT MOTHER FUCKA!!! YOU ADDEDED!");
       return data[key]
       
     }
   })
-   console.log(add);
    
+this.props.addUserDay(add)
  
 }
 

@@ -15,7 +15,9 @@ const year = date.getFullYear()
 const day= date.getDate()
 const updatedDay=day < 10 ? "0"+ day : day
 const currentDate= year + "-"+updatedMonth+"-"+updatedDay;
-
+let user;
+const rootRef=firebase.database().ref()
+const mainRef=rootRef.child('staging');
 class App extends Component {
   constructor(){
     super() 
@@ -26,6 +28,7 @@ class App extends Component {
         page:null,
         selectedPics:null
       }
+      
   }
   componentDidMount(){
     const rootRef=firebase.database().ref()
@@ -33,6 +36,7 @@ class App extends Component {
     mainRef.on('value', snap=>{
       this.setState({production:snap.val()})
     })
+
   }
   componentWillMount(){
     this.eventEmitter = new EventEmitter();
@@ -68,7 +72,89 @@ class App extends Component {
     });
   }
   emptyFunction(newUserData){
-    console.log(newUserData);
+    const email=newUserData.email
+    const pass=newUserData.pass
+    const packages= newUserData.packages
+    const access=newUserData.admin
+
+    
+    
+   const checkAuth=firebase.auth().createUserWithEmailAndPassword(email,pass).then(snap=>{
+    let key=snap.user.uid
+    const buildUser={
+      email:email,
+      uid:key,
+      access:access,
+      package:packages,
+      remainingTrips:newUserData.trips
+    }
+    delete newUserData.pass
+    const newUser=newUserData
+    const newClient={...this.state.production.users,
+      [key]:buildUser}
+      console.log(newClient);
+      
+    this.setState(prevState=>({
+      production:{
+        ...prevState.production,
+         users:newClient
+       }
+    }))
+    mainRef.child('users/').set(newClient)
+  })
+   .catch(err=>console.log(err)
+    )
+  }
+  removeUserDay=(remove)=>{
+    const user= Object.keys(this.state.production.users).filter(key=>{
+      if(key==remove){
+       const removeUsersDay=this.state.production.users[key]
+       const subDay=removeUsersDay.remainingTrips - 1
+       const updatedUser={
+         ...removeUsersDay,
+         remainingTrips:subDay
+       }
+       const newUsers={
+         ...this.state.production.users,
+         [key]:updatedUser
+       }
+       this.setState(prevState=>({
+         production:{
+           ...prevState.production,
+           users:newUsers
+         }
+       }))
+       console.log(removeUsersDay, updatedUser);
+       
+        return key
+      }
+    })
+
+    
+  }
+  addUserDay=(add)=>{
+    const user= Object.keys(this.state.production.users).filter(key=>{
+      if(key==add){
+       const addUsersDay=this.state.production.users[key]
+       const addDay=addUsersDay.remainingTrips + 1
+       const updatedUser={
+         ...addUsersDay,
+         remainingTrips:addDay
+       }
+       const newUsers={
+         ...this.state.production.users,
+         [key]:updatedUser
+       }
+       this.setState(prevState=>({
+         production:{
+           ...prevState.production,
+           users:newUsers
+         }
+       })) 
+        return key
+      }
+    })
+
     
   }
   userScreen({ newLandingPage }) {
@@ -98,12 +184,11 @@ class App extends Component {
   }
   render() {
   let mainArea;
-  
   if(this.state.user!==null && this.state.page===2){
     mainArea=(
       <div className="mainArea">
       <div>
-       <UpdateUser users={this.state.production.users}/>
+       <UpdateUser addUserDay={this.addUserDay} removeUserDay={this.removeUserDay} users={this.state.production.users}/>
       </div>
       </div>
     )
