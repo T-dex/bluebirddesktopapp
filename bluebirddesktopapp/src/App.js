@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import firebase,{auth} from './firebase/firebase'
+import axios from 'axios'
 import Header from './header'
 import { EventEmitter } from 'events'
 import AddUser from './components/addUser'
@@ -161,26 +162,24 @@ class App extends Component {
     if(this.state.user!==null){
     this.setState({ page: newLandingPage })}
   }
-  fileUpload(event){
+  fileUpload=(event)=>{
     console.log(event.target.files[0].path);
     this.setState({selectedPics:event.target.files[0]})
   
   }
-  pictureUpload(){
-    const storageRef=firebase.storage().ref().child('staging')
-    const ref=storageRef.child('images');
-    console.log(storageRef, ref);
-    const file= this.state.selectedPics;
-    const task = ref.put(file).then(snapshot=>{
-      console.log(snapshot);
-      console.log("uploaded!");
-    })
-
-    // const fd = new FormData();
-    // fd.append('image', this.state.selectedPics, this.state.selectedPics.name)
-    // console.log(fd, newfd);
-    console.log(task);
-    
+  pictureUpload=(event)=>{
+    const fd= new FormData();
+    fd.append('image', this.state.selectedPics, this.state.selectedPics.name)
+   axios.post('https://us-central1-bluebirdheli-dd1f5.cloudfunctions.net/uploadFile', fd, {
+     onUploadProgress:progressEvent=>{
+       console.log(progressEvent.loaded)
+       
+     }
+   })
+   .then(res=>{
+     console.log(res);
+     
+   })
   }
   render() {
   let mainArea;
