@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import firebase,{auth} from './firebase/firebase';
+import Logo from './styles/images/mainlogo.png'
 
 
 class Header extends Component {
@@ -18,13 +18,16 @@ class Header extends Component {
   render() {
     if(this.props.user == null){
       return (<div className="header font">
+      <div className="header">
       <div>
-        <form className="loginArea" onSubmit={(e)=>{this.logIn(), e.preventDefault();}}>
+        <form className="loginArea" onSubmit={(e)=>{this.logIn(),e.preventDefault()}}>
           <input className="loginField"type="text" placeholder="Email" ref="email"></input>
           <input className="loginField" type="password" placeholder="Password" ref="pass"></input>
           <button>Submit</button>
         </form>
+        </div>
        </div>
+       <img className="logo" src={Logo} alt="logo"/>
       </div>)
     }else{
     return (
@@ -32,6 +35,7 @@ class Header extends Component {
       <div>
        Welcome Back
        </div>
+       <img className="logo" src={Logo} alt="Logo"/>
       </div>
     );
   }

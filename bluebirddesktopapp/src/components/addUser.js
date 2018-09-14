@@ -15,9 +15,9 @@ const admin=this.refs.access.value
 const pass= this.refs.pass.value
 let trips
 let newUserData
-if(packages=='gold'&&admin!='Admin'){
+if(packages==='gold'&&admin!=='Admin'){
 trips=10
-}else if(packages=='silver'&&admin!='Admin'){
+}else if(packages==='silver'&&admin!=='Admin'){
   trips=5
 }else{
   trips=null

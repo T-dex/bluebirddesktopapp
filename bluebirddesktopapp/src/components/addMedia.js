@@ -1,26 +1,40 @@
 import React, { Component } from 'react';
-import { log } from 'util';
 
 class AddMedia extends Component{
-    constructor(){
-        super();
-    }
+   
 
 addFile=event=>{
     console.log(event);
     this.props.fileUpload(event)
 }
-uploadFile=()=>{
-   this.props.pictureUpload()
+uploadFile=(event)=>{
+    let userId=this.refs.user.value
+    const picData={userId, event}
+    console.log(picData);
+    
+   this.props.pictureUpload(picData)
 }
  render(){
-     console.log(this.props);
+     const users=Object.keys(this.props.users).map(key=>{
+         return (
+             <option key={key} value={this.props.users[key].uid}>
+                 {this.props.users[key].email}
+             </option>
+         )
+     })
+     console.log(users);
+     
      
   return(
     <div>
-      <input type="file" onChange={this.addFile}/>
+      <input type="file" multiple onChange={this.addFile}/>
       <button onClick={this.uploadFile}>Upload</button>
-      <img src={this.props.src}/>
+      <img src={this.props.src} alt=""/>
+      <div>
+          <select ref="user">
+              {users}
+          </select>
+      </div>
     </div>
   )
  }

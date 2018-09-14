@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import firebase,{auth} from './firebase/firebase'
-import axios from 'axios'
 import Header from './header'
 import { EventEmitter } from 'events'
 import AddUser from './components/addUser'
@@ -16,8 +15,9 @@ const year = date.getFullYear()
 const day= date.getDate()
 const updatedDay=day < 10 ? "0"+ day : day
 const currentDate= year + "-"+updatedMonth+"-"+updatedDay;
-let user;
+// // let user;
 const rootRef=firebase.database().ref()
+const storageRef= firebase.storage().ref()
 const mainRef=rootRef.child('staging');
 class App extends Component {
   constructor(){
@@ -32,9 +32,7 @@ class App extends Component {
       
   }
   componentDidMount(){
-    const rootRef=firebase.database().ref()
-    const mainRef=rootRef.child('staging').child('users')
-    mainRef.on('value', snap=>{
+    mainRef.child('users').on('value', snap=>{
       this.setState({production:snap.val()})
     })
 
@@ -53,13 +51,13 @@ class App extends Component {
     .then(snapshot=>{
       const userCheck=Object.keys(this.state.production).filter(key=>{if(this.state.production[key].email==snapshot.user.email){
        if(this.state.production[key].access=="admin"){
-        const rootRef=firebase.database().ref()
-        const mainRef= rootRef.child('staging')
         mainRef.on('value', snap=>{
           const app=snap.val()
+          console.log(app)
           const users={...app.users};
           const days={...app.days};
-          this.setState({production:{users:users,days:days}})
+          const images={...app.images}
+          this.setState({production:{users:users,days:days, images:images}})
         })
         this.setState({user:email, uid:snapshot.user.uid})   
           
@@ -163,23 +161,46 @@ class App extends Component {
     this.setState({ page: newLandingPage })}
   }
   fileUpload=(event)=>{
-    console.log(event.target.files[0].path);
     this.setState({selectedPics:event.target.files[0]})
   
   }
-  pictureUpload=(event)=>{
+  pictureUpload=(picData)=>{
+    const userId=picData.userId
     const fd= new FormData();
     fd.append('image', this.state.selectedPics, this.state.selectedPics.name)
-   axios.post('https://us-central1-bluebirdheli-dd1f5.cloudfunctions.net/uploadFile', fd, {
-     onUploadProgress:progressEvent=>{
-       console.log(progressEvent.loaded)
+    let picName=this.state.selectedPics.name
+    let file= this.state.selectedPics
+    const metadata={
+      contentType:'image/jpeg'
+    }
+    let refURL;
+    let newRef= storageRef.child(picName).put(file, metadata).then(snapshot=>snapshot.ref.getDownloadURL().then(downloadURL=>{
+      refURL=downloadURL
+      let picId;
+     mainRef.child('images').on('value',snap=>picId=snap.val()
+     )
+     const test=Object.keys(picId).map(key=>{
+     if(key===userId){
+      console.log("YEP");
+     }else{
+       const url=refURL
+       const newUserPics={
+         [userId]:{
+           date:currentDate,
+           url:url
+         }
+       }
+       console.log(newUserPics);
        
      }
-   })
-   .then(res=>{
-     console.log(res);
+    })
      
-   })
+//Logic needs to get figured out here. Just need to set the images up correctly. Will also need to adjust main page as it is not set up right
+//Listening to Aha at sunset coffee if you need help with the head space
+
+      
+
+    })) 
   }
   render() {
   let mainArea;
@@ -202,7 +223,7 @@ class App extends Component {
     mainArea=(
       <div className="mainArea">
       <div>
-      <AddMedia fileUpload={this.fileUpload} pictureUpload={this.pictureUpload} src={this.state.selectedPics}/>
+      <AddMedia fileUpload={this.fileUpload} pictureUpload={this.pictureUpload} src={this.state.selectedPics}users={this.state.production.users}/>
       </div>
     </div> 
     )

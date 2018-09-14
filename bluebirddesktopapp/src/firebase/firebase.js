@@ -1,5 +1,5 @@
 import firebase from 'firebase'
-import { log } from 'util';
+
 
 const config = {
   apiKey: "AIzaSyAM0DL6QzhVONFmxP5OHWGi9Vj4lS2RbbM",

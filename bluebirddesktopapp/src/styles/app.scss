@@ -26,6 +26,7 @@ html {
 .header{
     background-color:$cloudveilGrey;
     display:flex;
+    justify-content: space-between;
     padding:0;
     margin:0;
     height:15vh;
@@ -77,4 +78,8 @@ html {
 }
 .day-counter-admin{
   display:none;
+}
+.logo{
+ height:5rem;
+ padding-right:1rem;
 }
