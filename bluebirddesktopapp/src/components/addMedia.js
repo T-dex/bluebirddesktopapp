@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Calendar from './calendar'
 
 class AddMedia extends Component{
    
@@ -29,6 +30,7 @@ uploadFile=(event)=>{
     <div>
       <input type="file" multiple onChange={this.addFile}/>
       <button onClick={this.uploadFile}>Upload</button>
+      <Calendar/>
       <img src={this.props.src} alt=""/>
       <div>
           <select ref="user">
