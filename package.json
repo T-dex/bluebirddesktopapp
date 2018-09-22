@@ -23,7 +23,8 @@
   },
   "dependencies": {
     "concurrently": "^3.6.0",
-    "jshint": "^2.9.5",
+    "electron-is-dev": "^0.3.0",
+    "jshint": "^2.9.6",
     "wait-on": "^2.1.0"
   }
 }

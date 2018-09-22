@@ -8,17 +8,12 @@ import UpdateUser from './components/updateUser'
 import NavBar from './components/navBar'
 import './styles/app.css'
 
-const date=  new Date()
-const month = date.getMonth()+1
-const updatedMonth= month < 10 ? '0'+month : month
-const year = date.getFullYear()
-const day= date.getDate()
-const updatedDay=day < 10 ? "0"+ day : day
-const currentDate= year + "-"+updatedMonth+"-"+updatedDay;
+
 // // let user;
 const rootRef=firebase.database().ref()
 const storageRef= firebase.storage().ref()
 const mainRef=rootRef.child('staging');
+const pictureId=Math.floor(Math.random()*1000000000)
 class App extends Component {
   constructor(){
     super() 
@@ -49,8 +44,9 @@ class App extends Component {
     const promise= auth.signInWithEmailAndPassword(email,pass)
     promise
     .then(snapshot=>{
+      // eslint-disable-next-line
       const userCheck=Object.keys(this.state.production).filter(key=>{if(this.state.production[key].email==snapshot.user.email){
-       if(this.state.production[key].access=="admin"){
+       if(this.state.production[key].access==="admin"){
         mainRef.on('value', snap=>{
           const app=snap.val()
           console.log(app)
@@ -77,7 +73,7 @@ class App extends Component {
     const access=newUserData.admin
 
     
-    
+    // eslint-disable-next-line
    const checkAuth=firebase.auth().createUserWithEmailAndPassword(email,pass).then(snap=>{
     let key=snap.user.uid
     const buildUser={
@@ -88,7 +84,6 @@ class App extends Component {
       remainingTrips:newUserData.trips
     }
     delete newUserData.pass
-    const newUser=newUserData
     const newClient={...this.state.production.users,
       [key]:buildUser}
       console.log(newClient);
@@ -106,8 +101,9 @@ class App extends Component {
   }
 
   removeUserDay=(remove)=>{
+    // eslint-disable-next-line
     const user= Object.keys(this.state.production.users).filter(key=>{
-      if(key==remove){
+      if(key===remove){
        const removeUsersDay=this.state.production.users[key]
        const subDay=removeUsersDay.remainingTrips - 1
        const updatedUser={
@@ -133,8 +129,9 @@ class App extends Component {
     
   }
   addUserDay=(add)=>{
+    // eslint-disable-next-line
     const user= Object.keys(this.state.production.users).filter(key=>{
-      if(key==add){
+      if(key===add){
        const addUsersDay=this.state.production.users[key]
        const addDay=addUsersDay.remainingTrips + 1
        const updatedUser={
@@ -161,47 +158,92 @@ class App extends Component {
     this.setState({ page: newLandingPage })}
   }
   fileUpload=(event)=>{
-    this.setState({selectedPics:event.target.files[0]})
+    this.setState({selectedPics:event.target.files})
   
   }
   pictureUpload=(picData)=>{
     const userId=picData.userId
+    const date= picData.day
     const fd= new FormData();
     fd.append('image', this.state.selectedPics, this.state.selectedPics.name)
-    let picName=this.state.selectedPics.name
-    let file= this.state.selectedPics
+    
+    
+    let picName;
+    let file;
+    let refURL;
     const metadata={
       contentType:'image/jpeg'
     }
-    let refURL;
+    let picId;
+    Object.keys(this.state.selectedPics).map(key=>{
+      picName=this.state.selectedPics[key].name
+      file= this.state.selectedPics[key]
+    // eslint-disable-next-line
     let newRef= storageRef.child(picName).put(file, metadata).then(snapshot=>snapshot.ref.getDownloadURL().then(downloadURL=>{
       refURL=downloadURL
       let picId;
      mainRef.child('images').on('value',snap=>picId=snap.val()
      )
+     console.log(newRef);
+     // Images files are being uploaded in buckets Need to map over them and individually create new objects to pump into state
+     // eslint-disable-next-line
      const test=Object.keys(picId).map(key=>{
-     if(key===userId){
-      console.log("YEP");
+      const url=refURL
+     if(userId===key){
+       console.log(key, userId);
+       // would rather not go through another loop to get here but might need to.
+       ///causing many issues with inserting photos with out loopping over object
+      const newPicture={
+        ...this.state.production.images[key],
+        [pictureId]:{  
+        [pictureId]:{
+            [date]:[date],
+          url:url}}
+      }
+      console.log(newPicture, this.state.production.images);
+      
+      const updatedImageState={
+        ...this.state.production.images[key],
+        [key]:{[date]:newPicture}
+      }
+      console.log(updatedImageState,"User exsits");
+      
+      this.setState(prevState=>({
+        ...prevState.production.images[key],
+        images:updatedImageState
+      }))
      }else{
-       const url=refURL
+      console.log(key, userId);
+       console.log("New User");
+       
        const newUserPics={
-         [userId]:{
-           date:currentDate,
-           url:url
-         }
+          [date]:{
+           [pictureId]:{
+             date:pictureId,
+           url:url}}
        }
-       console.log(newUserPics);
+       const updatedImageState={
+         ...this.state.production.images,
+         [userId]:newUserPics
+       }
+       this.setState(prevState=>({
+         production:{
+           ...prevState.production,
+          images:updatedImageState
+         }
+       }))
+       mainRef.child('images/').set(updatedImageState)
        
      }
-    })
+    })})
      
 //Logic needs to get figured out here. Just need to set the images up correctly. Will also need to adjust main page as it is not set up right
 //Listening to Aha at sunset coffee if you need help with the head space
 
       
 
-    })) 
-  }
+    )
+  })}
   render() {
   let mainArea;
   if(this.state.user!==null && this.state.page===2){

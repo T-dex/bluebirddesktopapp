@@ -80,7 +80,7 @@ class Calendar extends Component {
       return (
         <div key={data}>
           <a
-            href="#"
+            
             onClick={e => {
               this.onSelectChange(e, data);
             }}
@@ -158,11 +158,9 @@ class Calendar extends Component {
       </span>
     );
   };
-  onDayClick = (e, picDate, day) => {
+  onDayClick = (e, picDate) => {
     console.log(picDate);
-    this.setState({
-      selectedDay: day
-    });
+    this.props.updateDay&&this.props.updateDay(picDate)
   };
   render() {
     const weekdays = this.weekdaysShort.map(day => {
@@ -186,11 +184,9 @@ class Calendar extends Component {
       let month = moment().month() + 1;
       let monthToString = month.toString();
       let classDate = monthToString + "-" + day.toString();
-      // let nextFlyDay = monthToString + "-" + (day + 1).toString();
       let currentDate = monthToString + "-" + this.currentDay();
-      let className = classDate == currentDate ? "day current-day" : "day";
-      let selectedClass = day == this.state.selectedDay ? " selected-day " : "";
-      let standby = "standby";
+      let className = classDate === currentDate ? "day current-day" : "day";
+      let selectedClass = day === this.state.selectedDay ? " selected-day " : "";
       let dayPickup = day < 10 ? "0" + day : day;
       let monthPickUp =
         monthToString < 10 ? "0" + monthToString : monthToString;
@@ -200,9 +196,9 @@ class Calendar extends Component {
         <td key={monthPickUp + "-" + dayPickup} ref="day">
           <span
             value={monthToString + "-" + dayPickup}
-            className={selectedClass}
+            className={selectedClass + className}
             onClick={e => {
-              this.onDayClick(e, picDate, day);
+              this.onDayClick(e, picDate);
             }}
           >
             {day}

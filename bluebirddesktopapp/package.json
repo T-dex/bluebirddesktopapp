@@ -10,11 +10,13 @@
     "uuid": "^3.3.2"
   },
   "devDependencies": {
+    "concurrently": "^4.0.1",
     "electron": "^2.0.3",
     "electron-devtools-installer": "^2.2.4",
-    "react-scripts": "1.1.4"
+    "react-scripts": "1.1.4",
+    "wait-on": "^3.0.1"
   },
-  "main": "src/mainelectron.js",
+  "main": "public/mainelectron.js",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
