@@ -12,6 +12,7 @@ import './styles/app.css';
 const rootRef = firebase.database().ref();
 const storageRef = firebase.storage().ref();
 const mainRef = rootRef.child('staging');
+// eslint-disable-next-line
 const pictureId = Math.floor(Math.random() * 1000000000);
 class App extends Component {
 	constructor() {
@@ -21,7 +22,8 @@ class App extends Component {
 			user: null,
 			uid: '',
 			page: null,
-			selectedPics: null
+      selectedPics: null,
+      images:[]
 		};
 	}
 	componentDidMount() {
@@ -43,7 +45,7 @@ class App extends Component {
 			.then((snapshot) => {
 				// eslint-disable-next-line
 				const userCheck = Object.keys(this.state.production).filter((key) => {
-					if (this.state.production[key].email == snapshot.user.email) {
+					if (this.state.production[key].email === snapshot.user.email) {
 						if (this.state.production[key].access === 'admin') {
 							mainRef.on('value', (snap) => {
 								const app = snap.val();
@@ -98,7 +100,7 @@ class App extends Component {
 			})
 			.catch((err) => console.log(err));
 	}
-
+	// eslint-disable-next-line
 	removeUserDay = (remove) => {
 		// eslint-disable-next-line
 		const user = Object.keys(this.state.production.users).filter((key) => {
@@ -166,9 +168,10 @@ class App extends Component {
 		let refURL;
 		let picId;
 		const fd = new FormData();
-		const test1 = Object.keys(this.state.selectedPics).forEach((key) => {
+		const test1 = Object.keys(this.state.selectedPics).map((key) => {
 			picName = this.state.selectedPics[key].name;
 			file = this.state.selectedPics[key];
+
 			fd.append('image', this.state.selectedPics[key], this.state.selectedPics[key].name);
 			const metadata = {
 				contentType: 'image/jpeg'
@@ -176,21 +179,50 @@ class App extends Component {
 			let newRef = storageRef.child(picName).put(file, metadata).then((snapshot) =>
 				snapshot.ref.getDownloadURL().then((downloadURL) => {
 					refURL = downloadURL;
-          let picId;
-          
-          
-          mainRef.child('images').on('value', (snap) => (picId = snap.val()));
-					const newUserId = Object.keys(picId).filter((key) => key == userId);
-			
+					console.log({refURL});
+
+					let picId;
+
+					mainRef.child('images').on('value', (snap) => (picId = snap.val()));
+					const newUserId = Object.keys(picId).filter((key) => key === userId);
+          console.log(this.state.images[key])
 					if (newUserId.length == 0) {
-            //Total brain fart today and can't figure out what to do when then data gets here. Need to loop over all of the pictures coming in through state and create new state.
+       
+						//Total brain fart today and can't figure out what to do when then data gets here. Need to loop over all of the pictures coming in through state and create new state.
             //This sections is when the user does not exsit
-						console.log('not in today', this.state.selectedPics[key].name);
-					} else {
-            //This is the section where the user does have photos
-            //need a second conditional in here to choose wether to create new or add to old state. Should write down what the structure is in the firebase to make sure this is all right
-            
-						console.log('the user exsits', this.state.selectedPics[key].name);
+            let tester;
+           if([key]==0){
+             console.log("ahh shit its the first onhe",refURL, this.state.selectedPics[key].name)
+						// let newPicture = [];
+						// let newPicObj = Object.keys(this.state.selectedPics).forEach((key) => {
+						// 	newPicture.push({
+						// 		...this.state.production.images[key],
+						// 		[pictureId]: {
+						// 			[pictureId]: {
+						// 				[date]: [ date ],
+						// 				url: refURL
+						// 			}
+						// 		}
+						// 	});
+						// });
+            // console.log({ newPicture });
+           }else if([key]!==0){
+             console.log("now we getting somewhere brah!",refURL,this.state.selectedPics)
+             tester=[key]
+             console.log(tester);
+             
+             
+             //this will allow me to push into an object that will inevnitably be added to state. Needs to run through once though
+           }
+           //this is where I would build the state and update to database
+           console.log(tester, "fuck knuckle");
+           
+          }
+					 else {
+						//This is the section where the user does have photos
+						//need a second conditional in here to choose wether to create new or add to old state. Should write down what the structure is in the firebase to make sure this is all right
+
+						console.log('the user exsits', this.state.selectedPics[key].name, [key]);
 					}
 
 					//Getting somewhere. If length = 0 user does not exsit and need to build new "state" and insert into images
@@ -242,10 +274,8 @@ class App extends Component {
 
 					//  }
 					// })
-        })
-  
-        
-      );
+				})
+			);
 		});
 
 		const metadata = {
