@@ -159,7 +159,6 @@ class Calendar extends Component {
     );
   };
   onDayClick = (e, picDate) => {
-    console.log(picDate);
     this.props.updateDay&&this.props.updateDay(picDate)
   };
   render() {

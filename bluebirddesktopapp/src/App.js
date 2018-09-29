@@ -189,27 +189,41 @@ class App extends Component {
 						...refURL,
 						[key]:testURL
 					}
-						console.log(refURL);
+						
 						
 					let picId;
 
 					mainRef.child('images').on('value', (snap) => (picId = snap.val()));
 					const newUserId = Object.keys(picId).filter((key) => key === userId);
 					if (newUserId.length === 0) {
-						//these lines are good to go once you figure out the RefURL
-						// let newPicKey=Math.floor(Math.random()*10000000)
-						// let tester;
-						// let newpicObj;
-						// const testObj=Object.keys(this.state.selectedPics).map(key=>{
-						// 	const newObj={
-						// 		[newPicKey]:{
-						// 		date:[newPicKey],
-						// 		url:refURL[key]
-						// 		}
-						// 	}
-						// 	return newObj
-						// })
-						// console.log(testObj);
+						const testObj=Object.keys(this.state.selectedPics).map(key=>{
+							let newKey=Math.floor(Math.random()*10000000)
+							const refKey=Object.keys(refURL[key]).map(key=>key)
+							
+							
+							const newObj={
+								[newKey]:{
+								date:newKey,
+								url:refURL[key][refKey]
+								}
+							}
+							return newObj
+						})
+						const imageObj={...testObj}
+						const images={
+								[date]:imageObj
+						}
+						
+						
+						const newPicUpload={
+							...this.state.production.images,
+							[userId]:images
+						}
+						console.log(newPicUpload);
+						
+						// this.setState((prevState)=>({
+
+						// }))
 						
 
 					
