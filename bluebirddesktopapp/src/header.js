@@ -13,7 +13,7 @@ class Header extends Component {
     const email= this.refs.email.value;
     const pass= this.refs.pass.value;
     const user= {email, pass};
-    console.log("this is working...")
+    
     
     this.props.logIn(user)
   }
