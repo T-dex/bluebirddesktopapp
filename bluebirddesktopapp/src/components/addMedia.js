@@ -9,9 +9,9 @@ class AddMedia extends Component{
    }
 
 addFile=event=>{
-    console.log(event);
+   
    const files=[...event]
-   console.log(files);
+ 
    
     this.props.fileUpload(event)
 }
@@ -19,7 +19,6 @@ uploadFile=(event)=>{
     let userId=this.refs.user.value
     let day= this.state.selectedDay
     const picData={userId, event, day }
-    console.log(picData);
     
    this.props.pictureUpload(picData)
 }
