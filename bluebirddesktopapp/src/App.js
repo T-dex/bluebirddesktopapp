@@ -268,58 +268,43 @@ class App extends Component {
 						//This is the section where the user does have photos
 						//need a second conditional in here to choose wether to create new or add to old state. Should write down what the structure is in the firebase to make sure this is all right
 
-						// console.log('the user exsits', this.state.selectedPics[key].name, [ key ]);
+						console.log('the user exsits', this.state.selectedPics[key].name, [ key ], userId);
+						let pictureObj;
+						let newObj;
+						// eslint-disable-next-line
+						const testObj = Object.keys(this.state.selectedPics).map(key => {
+							const refKey = Object.keys(updatedURL[key]).map(key => key)
+							let date = refKey[0]
+							newObj = {
+								...newObj,
+								[refKey]: {
+									date: date,
+									url: updatedURL[key][refKey]
+								}
+							}
+							return newObj
+						})
+
+						const newPicUpload = {
+							...this.state.production.images[userId],
+							[date]:newObj
+						}
+						console.log(newPicUpload);
+						const newUserImageObj={
+							...this.state.production.images,
+							[userId]:newPicUpload
+	
+						}
+						console.log(newUserImageObj);
+
+						this.setState((prevState)=>({
+							production:{
+								...prevState.production,
+								images:newUserImageObj
+							}
+						}))
+						mainRef.child("images").set(newUserImageObj);
 					}
-
-					//Getting somewhere. If length = 0 user does not exsit and need to build new "state" and insert into images
-
-					// Need to take users and photos and loop over them. If they match then push to a previous state, if not build a new state with new user.
-
-					//  const test=Object.keys(picId).map(key=>{
-					//   console.log(refURL, [key],"inside");
-					//   const url=refURL
-					//  if(userId===key){
-					//    // would rather not go through another loop to get here but might need to.
-					//    ///causing many issues with inserting photos with out loopping over object
-					//   const newPicture={
-					//     ...this.state.production.images[key],
-					//     [pictureId]:{
-					//     [pictureId]:{
-					//         [date]:[date],
-					//       url:url}}
-					//   }
-					//   console.log(newPicture,[key]);
-
-					//   const updatedImageState={
-					//     ...this.state.production.images[key],
-					//     [key]:{[date]:newPicture}
-					//   }
-
-					//   this.setState(prevState=>({
-					//     ...prevState.production.images[key],
-					//     images:updatedImageState
-					//   }))
-					//  }else{
-					//    const newUserPics={
-					//       [date]:{
-					//        [pictureId]:{
-					//          date:pictureId,
-					//        url:url}}
-					//    }
-					//    const updatedImageState={
-					//      ...this.state.production.images,
-					//      [userId]:newUserPics
-					//    }
-					//    this.setState(prevState=>({
-					//      production:{
-					//        ...prevState.production,
-					//       images:updatedImageState
-					//      }
-					//    }))
-					//   //  mainRef.child('images/').set(updatedImageState)
-
-					//  }
-					// })
 				})
 			);
 		});
