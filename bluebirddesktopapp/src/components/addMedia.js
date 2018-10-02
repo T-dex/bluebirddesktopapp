@@ -9,7 +9,7 @@ class AddMedia extends Component{
    }
 
 addFile=event=>{
-   
+   // eslint-disable-next-line
    const files=[...event]
  
    

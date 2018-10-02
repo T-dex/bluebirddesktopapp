@@ -168,7 +168,7 @@ class App extends Component {
 		let picName;
 		let file;
 		let refURL;
-
+		let updatedURL=[];
 		const fd = new FormData();
 		// eslint-disable-next-line
 		const test1 = Object.keys(this.state.selectedPics).map((key) => {
@@ -179,54 +179,59 @@ class App extends Component {
 			const metadata = {
 				contentType: 'image/jpeg'
 			};
-			refURL={}
+			
 			let newPicKey=Math.floor(Math.random()*10000000)
 			// eslint-disable-next-line
 			let newRef = storageRef.child(picName).put(file, metadata).then((snapshot) =>
 				snapshot.ref.getDownloadURL().then((downloadURL) => {
 					let testURL={[newPicKey]:downloadURL}
-					refURL={
+					  refURL={
 						...refURL,
-						[key]:testURL
+						[key]:testURL,
+						key:key
 					}
-						
-						
+					updatedURL.push(testURL)	
 					let picId;
 
 					mainRef.child('images').on('value', (snap) => (picId = snap.val()));
 					const newUserId = Object.keys(picId).filter((key) => key === userId);
 					if (newUserId.length === 0) {
-						const testObj=Object.keys(this.state.selectedPics).map(key=>{
-							let newKey=Math.floor(Math.random()*10000000)
-							const refKey=Object.keys(refURL[key]).map(key=>key)
-							
-							
-							const newObj={
-								[newKey]:{
-								date:newKey,
-								url:refURL[key][refKey]
+						// eslint-disable-next-line
+						let pictureObj;
+						let newObj;
+						// eslint-disable-next-line
+						  const testObj=Object.keys(this.state.selectedPics).map(key=>{
+							const refKey=Object.keys(updatedURL[key]).map(key=>key)
+							let date=refKey[0]
+							  newObj={
+								  ...newObj,
+								[refKey]:{
+								date:date,
+								url:updatedURL[key][refKey]
 								}
 							}
 							return newObj
 						})
-						const imageObj={...testObj}
-						const images={
-								[date]:imageObj
+
+						const pictures={
+							[date]:newObj
 						}
 						
 						
 						const newPicUpload={
 							...this.state.production.images,
-							[userId]:images
+							[userId]:pictures
 						}
 						console.log(newPicUpload);
 						
-						// this.setState((prevState)=>({
-
-						// }))
+						this.setState((prevState)=>({
+							production:{
+								...prevState.production,
+								images:newPicUpload
+							}
+						}))
 						
-
-					
+						mainRef.child("images").set(newPicUpload);
 					} else {
 						//This is the section where the user does have photos
 						//need a second conditional in here to choose wether to create new or add to old state. Should write down what the structure is in the firebase to make sure this is all right
