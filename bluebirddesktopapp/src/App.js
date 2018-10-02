@@ -1,7 +1,13 @@
-import React, { Component } from 'react';
-import firebase, { auth } from './firebase/firebase';
+import React, {
+	Component
+} from 'react';
+import firebase, {
+	auth
+} from './firebase/firebase';
 import Header from './header';
-import { EventEmitter } from 'events';
+import {
+	EventEmitter
+} from 'events';
 import AddUser from './components/addUser';
 import AddMedia from './components/addMedia';
 import UpdateUser from './components/updateUser';
@@ -24,18 +30,24 @@ class App extends Component {
 			page: null,
 			selectedPics: [],
 			images: [],
-			uploadimages:{}
+			uploadimages: {}
 		};
 	}
 	componentDidMount() {
 		mainRef.child('users').on('value', (snap) => {
-			this.setState({ production: snap.val() });
+			this.setState({
+				production: snap.val()
+			});
 		});
 	}
 	componentWillMount() {
 		this.eventEmitter = new EventEmitter();
-		this.eventEmitter.addListener('landingPage', ({ page }) => {
-			this.userScreen({ newLandingPage: page });
+		this.eventEmitter.addListener('landingPage', ({
+			page
+		}) => {
+			this.userScreen({
+				newLandingPage: page
+			});
 		});
 	}
 	logIn(user) {
@@ -50,12 +62,24 @@ class App extends Component {
 						if (this.state.production[key].access === 'admin') {
 							mainRef.on('value', (snap) => {
 								const app = snap.val();
-								const users = { ...app.users };
-								const days = { ...app.days };
-								const images = { ...app.images };
-								this.setState({ production: { users: users, days: days, images: images } });
+								const users = { ...app.users
+								};
+								const days = { ...app.days
+								};
+								const images = { ...app.images
+								};
+								this.setState({
+									production: {
+										users: users,
+										days: days,
+										images: images
+									}
+								});
 							});
-							this.setState({ user: email, uid: snapshot.user.uid });
+							this.setState({
+								user: email,
+								uid: snapshot.user.uid
+							});
 							return this.state.production[key];
 						}
 					}
@@ -153,13 +177,19 @@ class App extends Component {
 			}
 		});
 	};
-	userScreen({ newLandingPage }) {
+	userScreen({
+		newLandingPage
+	}) {
 		if (this.state.user !== null) {
-			this.setState({ page: newLandingPage });
+			this.setState({
+				page: newLandingPage
+			});
 		}
 	}
 	fileUpload = (event) => {
-		this.setState({ selectedPics: event.target.files });
+		this.setState({
+			selectedPics: event.target.files
+		});
 	};
 	pictureUpload = (picData) => {
 		const userId = picData.userId;
@@ -168,7 +198,7 @@ class App extends Component {
 		let picName;
 		let file;
 		let refURL;
-		let updatedURL=[];
+		let updatedURL = [];
 		const fd = new FormData();
 		// eslint-disable-next-line
 		const test1 = Object.keys(this.state.selectedPics).map((key) => {
@@ -179,18 +209,20 @@ class App extends Component {
 			const metadata = {
 				contentType: 'image/jpeg'
 			};
-			
-			let newPicKey=Math.floor(Math.random()*10000000)
+
+			let newPicKey = Math.floor(Math.random() * 10000000)
 			// eslint-disable-next-line
 			let newRef = storageRef.child(picName).put(file, metadata).then((snapshot) =>
 				snapshot.ref.getDownloadURL().then((downloadURL) => {
-					let testURL={[newPicKey]:downloadURL}
-					  refURL={
-						...refURL,
-						[key]:testURL,
-						key:key
+					let testURL = {
+						[newPicKey]: downloadURL
 					}
-					updatedURL.push(testURL)	
+					refURL = {
+						...refURL,
+						[key]: testURL,
+						key: key
+					}
+					updatedURL.push(testURL)
 					let picId;
 
 					mainRef.child('images').on('value', (snap) => (picId = snap.val()));
@@ -200,37 +232,37 @@ class App extends Component {
 						let pictureObj;
 						let newObj;
 						// eslint-disable-next-line
-						  const testObj=Object.keys(this.state.selectedPics).map(key=>{
-							const refKey=Object.keys(updatedURL[key]).map(key=>key)
-							let date=refKey[0]
-							  newObj={
-								  ...newObj,
-								[refKey]:{
-								date:date,
-								url:updatedURL[key][refKey]
+						const testObj = Object.keys(this.state.selectedPics).map(key => {
+							const refKey = Object.keys(updatedURL[key]).map(key => key)
+							let date = refKey[0]
+							newObj = {
+								...newObj,
+								[refKey]: {
+									date: date,
+									url: updatedURL[key][refKey]
 								}
 							}
 							return newObj
 						})
 
-						const pictures={
-							[date]:newObj
+						const pictures = {
+							[date]: newObj
 						}
-						
-						
-						const newPicUpload={
+
+
+						const newPicUpload = {
 							...this.state.production.images,
-							[userId]:pictures
+							[userId]: pictures
 						}
 						console.log(newPicUpload);
-						
-						this.setState((prevState)=>({
-							production:{
+
+						this.setState((prevState) => ({
+							production: {
 								...prevState.production,
-								images:newPicUpload
+								images: newPicUpload
 							}
 						}))
-						
+
 						mainRef.child("images").set(newPicUpload);
 					} else {
 						//This is the section where the user does have photos
@@ -299,11 +331,11 @@ class App extends Component {
 		// eslint-disable-next-line
 		let newRef = storageRef.child(picName).put(file, metadata).then(
 			(snapshot) =>
-				snapshot.ref.getDownloadURL().then((downloadURL) => {
-					refURL = downloadURL;
-					// Images files are being uploaded in buckets Need to map over them and individually create new objects to pump into state
-					// eslint-disable-next-line
-				})
+			snapshot.ref.getDownloadURL().then((downloadURL) => {
+				refURL = downloadURL;
+				// Images files are being uploaded in buckets Need to map over them and individually create new objects to pump into state
+				// eslint-disable-next-line
+			})
 
 			//Logic needs to get figured out here. Just need to set the images up correctly. Will also need to adjust main page as it is not set up right
 			//Listening to Aha at sunset coffee if you need help with the head space
@@ -312,45 +344,81 @@ class App extends Component {
 	render() {
 		let mainArea;
 		if (this.state.user !== null && this.state.page === 2) {
-			mainArea = (
-				<div className="mainArea">
-					<div>
-						<UpdateUser
-							addUserDay={this.addUserDay}
-							removeUserDay={this.removeUserDay}
-							users={this.state.production.users}
-						/>
-					</div>
-				</div>
+			mainArea = ( <
+				div className = "mainArea" >
+				<
+				div >
+				<
+				UpdateUser addUserDay = {
+					this.addUserDay
+				}
+				removeUserDay = {
+					this.removeUserDay
+				}
+				users = {
+					this.state.production.users
+				}
+				/> <
+				/div> <
+				/div>
 			);
 		} else if (this.state.user !== null && this.state.page === 1) {
-			mainArea = (
-				<div className="mainArea">
-					<div>
-						<AddUser emptyFunction={this.emptyFunction.bind(this)} />
-					</div>
-				</div>
+			mainArea = ( <
+				div className = "mainArea" >
+				<
+				div >
+				<
+				AddUser emptyFunction = {
+					this.emptyFunction.bind(this)
+				}
+				/> <
+				/div> <
+				/div>
 			);
 		} else if (this.state.user !== null && this.state.page === 3) {
-			mainArea = (
-				<div className="mainArea">
-					<div>
-						<AddMedia
-							fileUpload={this.fileUpload}
-							pictureUpload={this.pictureUpload}
-							src={this.state.selectedPics}
-							users={this.state.production.users}
-						/>
-					</div>
-				</div>
+			mainArea = ( <
+				div className = "mainArea" >
+				<
+				div >
+				<
+				AddMedia fileUpload = {
+					this.fileUpload
+				}
+				pictureUpload = {
+					this.pictureUpload
+				}
+				src = {
+					this.state.selectedPics
+				}
+				users = {
+					this.state.production.users
+				}
+				/> <
+				/div> <
+				/div>
 			);
 		}
-		return (
-			<div className="App">
-				<Header className="header" user={this.state.user} logIn={this.logIn.bind(this)} />
-				<NavBar eventEmitter={this.eventEmitter} landingPage={this.state.page} />
-				{mainArea}
-			</div>
+		return ( <
+			div className = "App" >
+			<
+			Header className = "header"
+			user = {
+				this.state.user
+			}
+			logIn = {
+				this.logIn.bind(this)
+			}
+			/> <
+			NavBar eventEmitter = {
+				this.eventEmitter
+			}
+			landingPage = {
+				this.state.page
+			}
+			/> {
+				mainArea
+			} <
+			/div>
 		);
 	}
 }
