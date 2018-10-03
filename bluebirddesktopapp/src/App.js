@@ -198,14 +198,11 @@ class App extends Component {
 		let picName;
 		let file;
 		let refURL;
-		let updatedURL = [];
-		const fd = new FormData();
+		let updatedURL=[];
 		// eslint-disable-next-line
 		const test1 = Object.keys(this.state.selectedPics).map((key) => {
 			picName = this.state.selectedPics[key].name;
 			file = this.state.selectedPics[key];
-
-			fd.append('image', this.state.selectedPics[key], this.state.selectedPics[key].name);
 			const metadata = {
 				contentType: 'image/jpeg'
 			};
@@ -227,24 +224,28 @@ class App extends Component {
 
 					mainRef.child('images').on('value', (snap) => (picId = snap.val()));
 					const newUserId = Object.keys(picId).filter((key) => key === userId);
-					if (newUserId.length === 0) {
-						// eslint-disable-next-line
-						let pictureObj;
 						let newObj;
-						// eslint-disable-next-line
-						const testObj = Object.keys(this.state.selectedPics).map(key => {
-							const refKey = Object.keys(updatedURL[key]).map(key => key)
+						
+						Object.keys(this.state.selectedPics).map(key => {
+							const refKey = Object.keys(updatedURL[key]).map(key => {
+								return key
+							})
+							
 							let date = refKey[0]
-							newObj = {
+							if(refKey.length!==0){
+								newObj = {
 								...newObj,
 								[refKey]: {
 									date: date,
 									url: updatedURL[key][refKey]
 								}
+							}}else{
+								return
 							}
 							return newObj
 						})
 
+					if(newUserId.length===0){
 						const pictures = {
 							[date]: newObj
 						}
@@ -264,27 +265,7 @@ class App extends Component {
 						}))
 
 						mainRef.child("images").set(newPicUpload);
-					} else {
-						//This is the section where the user does have photos
-						//need a second conditional in here to choose wether to create new or add to old state. Should write down what the structure is in the firebase to make sure this is all right
-
-						console.log('the user exsits', this.state.selectedPics[key].name, [ key ], userId);
-						let pictureObj;
-						let newObj;
-						// eslint-disable-next-line
-						const testObj = Object.keys(this.state.selectedPics).map(key => {
-							const refKey = Object.keys(updatedURL[key]).map(key => key)
-							let date = refKey[0]
-							newObj = {
-								...newObj,
-								[refKey]: {
-									date: date,
-									url: updatedURL[key][refKey]
-								}
-							}
-							return newObj
-						})
-
+					}else{
 						const newPicUpload = {
 							...this.state.production.images[userId],
 							[date]:newObj
@@ -309,22 +290,6 @@ class App extends Component {
 			);
 		});
 
-		const metadata = {
-			contentType: 'image/jpeg'
-		};
-
-		// eslint-disable-next-line
-		let newRef = storageRef.child(picName).put(file, metadata).then(
-			(snapshot) =>
-			snapshot.ref.getDownloadURL().then((downloadURL) => {
-				refURL = downloadURL;
-				// Images files are being uploaded in buckets Need to map over them and individually create new objects to pump into state
-				// eslint-disable-next-line
-			})
-
-			//Logic needs to get figured out here. Just need to set the images up correctly. Will also need to adjust main page as it is not set up right
-			//Listening to Aha at sunset coffee if you need help with the head space
-		);
 	};
 	render() {
 		let mainArea;
