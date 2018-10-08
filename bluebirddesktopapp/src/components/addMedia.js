@@ -3,7 +3,7 @@ import Calendar from './calendar'
 
 class AddMedia extends Component{
    state={
-       selectedDay:'08-09-2018',
+       selectedDay:'Click here to Select Day',
        show:false,
        files:[]
    }
@@ -11,8 +11,6 @@ class AddMedia extends Component{
 addFile=event=>{
    // eslint-disable-next-line
    const files=[...event]
- 
-   
     this.props.fileUpload(event)
 }
 uploadFile=(event)=>{

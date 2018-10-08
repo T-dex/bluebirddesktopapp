@@ -32,7 +32,7 @@ if(checkEmail.includes(amp)&&trips!=null){
 }else{
   alert('Something aint right please check your input')
 }
-this.props.emptyFunction(newUserData)
+this.props.newUser(newUserData)
 
 
 }

@@ -84,7 +84,7 @@ class App extends Component {
 				console.log('Failed');
 			});
 	}
-	emptyFunction(newUserData) {
+	newUser(newUserData) {
 		const email = newUserData.email;
 		const pass = newUserData.pass;
 		const packages = newUserData.packages;
@@ -124,7 +124,7 @@ class App extends Component {
 	removeUserDay = (remove) => {
 		// eslint-disable-next-line
 		const user = Object.keys(this.state.production.users).filter((key) => {
-			if (key === remove) {
+			if (key === remove[0]) {
 				const removeUsersDay = this.state.production.users[key];
 				const subDay = removeUsersDay.remainingTrips - 1;
 				const updatedUser = {
@@ -150,7 +150,8 @@ class App extends Component {
 	addUserDay = (add) => {
 		// eslint-disable-next-line
 		const user = Object.keys(this.state.production.users).filter((key) => {
-			if (key === add) {
+			if (key === add[0]) {
+				console.log(add);
 				const addUsersDay = this.state.production.users[key];
 				const addDay = addUsersDay.remainingTrips + 1;
 				const updatedUser = {
@@ -306,7 +307,7 @@ class App extends Component {
 			mainArea = (
 				<div className="mainArea">
 					<div>
-						<AddUser emptyFunction={this.emptyFunction.bind(this)} />{' '}
+						<AddUser newUser={this.newUser.bind(this)} />{' '}
 					</div>{' '}
 				</div>
 			);

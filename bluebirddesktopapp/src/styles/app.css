@@ -54,10 +54,12 @@ html {
     background-color: #D48C3C; }
 
 .userBlock {
-  border: 1px double black; }
+  border: 1px double black;
+  display: grid; }
 
 .day-counter {
-  display: flex; }
+  display: flex;
+  align-items: center; }
 
 .day-counter-admin {
   display: none; }
@@ -65,5 +67,9 @@ html {
 .logo {
   height: 5rem;
   padding-right: 1rem; }
+
+button {
+  width: 50%;
+  height: 50%; }
 
 /*# sourceMappingURL=app.css.map */
