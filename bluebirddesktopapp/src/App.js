@@ -1,13 +1,7 @@
-import React, {
-	Component
-} from 'react';
-import firebase, {
-	auth
-} from './firebase/firebase';
+import React, { Component } from 'react';
+import firebase, { auth } from './firebase/firebase';
 import Header from './header';
-import {
-	EventEmitter
-} from 'events';
+import { EventEmitter } from 'events';
 import AddUser from './components/addUser';
 import AddMedia from './components/addMedia';
 import UpdateUser from './components/updateUser';
@@ -42,9 +36,7 @@ class App extends Component {
 	}
 	componentWillMount() {
 		this.eventEmitter = new EventEmitter();
-		this.eventEmitter.addListener('landingPage', ({
-			page
-		}) => {
+		this.eventEmitter.addListener('landingPage', ({ page }) => {
 			this.userScreen({
 				newLandingPage: page
 			});
@@ -62,11 +54,14 @@ class App extends Component {
 						if (this.state.production[key].access === 'admin') {
 							mainRef.on('value', (snap) => {
 								const app = snap.val();
-								const users = { ...app.users
+								const users = {
+									...app.users
 								};
-								const days = { ...app.days
+								const days = {
+									...app.days
 								};
-								const images = { ...app.images
+								const images = {
+									...app.images
 								};
 								this.setState({
 									production: {
@@ -177,9 +172,7 @@ class App extends Component {
 			}
 		});
 	};
-	userScreen({
-		newLandingPage
-	}) {
+	userScreen({ newLandingPage }) {
 		if (this.state.user !== null) {
 			this.setState({
 				page: newLandingPage
@@ -198,7 +191,7 @@ class App extends Component {
 		let picName;
 		let file;
 		let refURL;
-		let updatedURL=[];
+		let updatedURL = [];
 		// eslint-disable-next-line
 		const test1 = Object.keys(this.state.selectedPics).map((key) => {
 			picName = this.state.selectedPics[key].name;
@@ -207,54 +200,58 @@ class App extends Component {
 				contentType: 'image/jpeg'
 			};
 
-			let newPicKey = Math.floor(Math.random() * 10000000)
+			let newPicKey = Math.floor(Math.random() * 10000000);
 			// eslint-disable-next-line
-			let newRef = storageRef.child(picName).put(file, metadata).then((snapshot) =>
+			let newRef = storageRef.child(picName).put(file, metadata).then((snapshot) =>{
+				let progress = snapshot.bytesTransferred / snapshot.totalBytes*100
+					console.log('Upload is ' + progress + '% done');
 				snapshot.ref.getDownloadURL().then((downloadURL) => {
 					let testURL = {
 						[newPicKey]: downloadURL
-					}
+					};
 					refURL = {
 						...refURL,
 						[key]: testURL,
 						key: key
-					}
-					updatedURL.push(testURL)
+					};
+					updatedURL.push(testURL);
 					let picId;
 
 					mainRef.child('images').on('value', (snap) => (picId = snap.val()));
+					console.log(mainRef.bytesTransferred);
+
 					const newUserId = Object.keys(picId).filter((key) => key === userId);
-						let newObj;
-						
-						Object.keys(this.state.selectedPics).map(key => {
-							const refKey = Object.keys(updatedURL[key]).map(key => {
-								return key
-							})
-							
-							let date = refKey[0]
-							if(refKey.length!==0){
-								newObj = {
+					let newObj;
+
+					Object.keys(this.state.selectedPics).map((key) => {
+						const refKey = Object.keys(updatedURL[key] || {}).map((key) => {
+							return key;
+						});
+
+						let date = refKey[0];
+						if (refKey.length !== 0) {
+							newObj = {
 								...newObj,
 								[refKey]: {
 									date: date,
 									url: updatedURL[key][refKey]
 								}
-							}}else{
-								return
-							}
-							return newObj
-						})
+							};
+						} else {
+							return;
+						}
+						return newObj;
+					});
 
-					if(newUserId.length===0){
+					if (newUserId.length === 0) {
 						const pictures = {
 							[date]: newObj
-						}
-
+						};
 
 						const newPicUpload = {
 							...this.state.production.images,
 							[userId]: pictures
-						}
+						};
 						console.log(newPicUpload);
 
 						this.setState((prevState) => ({
@@ -262,113 +259,76 @@ class App extends Component {
 								...prevState.production,
 								images: newPicUpload
 							}
-						}))
+						}));
 
-						mainRef.child("images").set(newPicUpload);
-					}else{
+						mainRef.child('images').set(newPicUpload);
+						setTimeout(()=>alert("Images uploaded!"),3000)
+					} else {
 						const newPicUpload = {
 							...this.state.production.images[userId],
-							[date]:newObj
-						}
+							[date]: newObj
+						};
 						console.log(newPicUpload);
-						const newUserImageObj={
+						const newUserImageObj = {
 							...this.state.production.images,
-							[userId]:newPicUpload
-	
-						}
+							[userId]: newPicUpload
+						};
 						console.log(newUserImageObj);
 
-						this.setState((prevState)=>({
-							production:{
+						this.setState((prevState) => ({
+							production: {
 								...prevState.production,
-								images:newUserImageObj
+								images: newUserImageObj
 							}
-						}))
-						mainRef.child("images").set(newUserImageObj);
+						}));
+						mainRef.child('images').set(newUserImageObj);
+						setTimeout(()=>alert("Images uploaded!"),3000)
 					}
 				})
-			);
+			});
 		});
-
 	};
 	render() {
 		let mainArea;
 		if (this.state.user !== null && this.state.page === 2) {
-			mainArea = ( <
-				div className = "mainArea" >
-				<
-				div >
-				<
-				UpdateUser addUserDay = {
-					this.addUserDay
-				}
-				removeUserDay = {
-					this.removeUserDay
-				}
-				users = {
-					this.state.production.users
-				}
-				/> <
-				/div> <
-				/div>
+			mainArea = (
+				<div className="mainArea">
+					<div>
+						<UpdateUser
+							addUserDay={this.addUserDay}
+							removeUserDay={this.removeUserDay}
+							users={this.state.production.users}
+						/>{' '}
+					</div>{' '}
+				</div>
 			);
 		} else if (this.state.user !== null && this.state.page === 1) {
-			mainArea = ( <
-				div className = "mainArea" >
-				<
-				div >
-				<
-				AddUser emptyFunction = {
-					this.emptyFunction.bind(this)
-				}
-				/> <
-				/div> <
-				/div>
+			mainArea = (
+				<div className="mainArea">
+					<div>
+						<AddUser emptyFunction={this.emptyFunction.bind(this)} />{' '}
+					</div>{' '}
+				</div>
 			);
 		} else if (this.state.user !== null && this.state.page === 3) {
-			mainArea = ( <
-				div className = "mainArea" >
-				<
-				div >
-				<
-				AddMedia fileUpload = {
-					this.fileUpload
-				}
-				pictureUpload = {
-					this.pictureUpload
-				}
-				src = {
-					this.state.selectedPics
-				}
-				users = {
-					this.state.production.users
-				}
-				/> <
-				/div> <
-				/div>
+			mainArea = (
+				<div className="mainArea">
+					<div>
+						<AddMedia
+							fileUpload={this.fileUpload}
+							pictureUpload={this.pictureUpload}
+							src={this.state.selectedPics}
+							users={this.state.production.users}
+						/>{' '}
+					</div>{' '}
+				</div>
 			);
 		}
-		return ( <
-			div className = "App" >
-			<
-			Header className = "header"
-			user = {
-				this.state.user
-			}
-			logIn = {
-				this.logIn.bind(this)
-			}
-			/> <
-			NavBar eventEmitter = {
-				this.eventEmitter
-			}
-			landingPage = {
-				this.state.page
-			}
-			/> {
-				mainArea
-			} <
-			/div>
+		return (
+			<div className="App">
+				<Header className="header" user={this.state.user} logIn={this.logIn.bind(this)} />{' '}
+				<NavBar eventEmitter={this.eventEmitter} landingPage={this.state.page} /> {mainArea}{' '}
+			</div>
 		);
 	}
 }
