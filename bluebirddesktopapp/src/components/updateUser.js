@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { log } from 'builder-util';
 
 
 
@@ -8,6 +9,7 @@ class UpdateUser extends Component{
         super()
         this.removeDay=this.removeDay.bind(this)
         this.addDay=this.addDay.bind(this)
+        this.deleteUser=this.deleteUser.bind(this)
     }
 componentDidMount(){
 data=this.props.users
@@ -31,7 +33,17 @@ addDay=(event)=>{
     }
   })
    this.props.addUserDay&&this.props.addUserDay(add)
+
+  
  return
+}
+deleteUser=(event)=>{
+  const deleteUser = Object.keys(data).filter(key=>{
+    if(data[key].email===event.target.value){
+      return data[key]
+  }})
+  console.log(deleteUser, data);
+  this.props.removeUser&&this.props.removeUser(deleteUser)
 }
 
  render(){
@@ -39,7 +51,7 @@ addDay=(event)=>{
      const checker=Object.keys(check).map(key=>{
        return(
          <div className="userBlock">
-          
+            <button className="removeUser" onClick={this.deleteUser} value={check[key].email}>Delete User</button>
            <h2>{check[key].email}</h2>
            <div className={check[key].access==='admin'?'day-counter-admin':'day-counter'}><h3>Access Days</h3><button  onClick={this.removeDay} value={check[key].email}>&lt;</button><h4>{check[key].remainingTrips}</h4><button onClick={this.addDay} value={check[key].email}>&gt;</button></div>
         </div>

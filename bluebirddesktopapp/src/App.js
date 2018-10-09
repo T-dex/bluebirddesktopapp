@@ -7,6 +7,7 @@ import AddMedia from './components/addMedia';
 import UpdateUser from './components/updateUser';
 import NavBar from './components/navBar';
 import './styles/app.css';
+import { log } from 'builder-util';
 
 // // let user;
 const rootRef = firebase.database().ref();
@@ -120,6 +121,7 @@ class App extends Component {
 			})
 			.catch((err) => console.log(err));
 	}
+	//updating user logic
 	// eslint-disable-next-line
 	removeUserDay = (remove) => {
 		// eslint-disable-next-line
@@ -173,6 +175,41 @@ class App extends Component {
 			}
 		});
 	};
+
+	removeUser=(deleteUser)=>{
+		
+		const user=Object.keys(this.state.production.users).filter((key)=>{
+			if(key===deleteUser[0]){
+				console.log(key);
+				let UserKey={...this.state.production.users}
+				let newUserList={}
+				let newState= Object.keys(UserKey).filter(user=>{
+					if(user!=key){
+					delete UserKey[key]
+					newUserList={...UserKey}
+						
+					return UserKey
+				}}
+				)
+				console.log(newState, newUserList);
+				if(window.confirm("Are you sure you want to Delete this User")){
+					this.setState((prevState)=>({
+						production:{
+							...prevState.production,
+							users:newUserList
+						}
+					}))
+				}else{
+					return
+				}
+				
+			
+				
+			}
+		})
+		
+	}
+	//user screen logic
 	userScreen({ newLandingPage }) {
 		if (this.state.user !== null) {
 			this.setState({
@@ -180,6 +217,8 @@ class App extends Component {
 			});
 		}
 	}
+
+	//Picture uploading functions
 	fileUpload = (event) => {
 		this.setState({
 			selectedPics: event.target.files
@@ -289,6 +328,8 @@ class App extends Component {
 			});
 		});
 	};
+
+
 	render() {
 		let mainArea;
 		if (this.state.user !== null && this.state.page === 2) {
@@ -298,6 +339,7 @@ class App extends Component {
 						<UpdateUser
 							addUserDay={this.addUserDay}
 							removeUserDay={this.removeUserDay}
+							removeUser={this.removeUser}
 							users={this.state.production.users}
 						/>{' '}
 					</div>{' '}

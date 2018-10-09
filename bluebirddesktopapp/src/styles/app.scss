@@ -46,7 +46,8 @@ html {
 
 .mainArea{
   display:grid;
-  grid-template-columns: repeat(2, 1fr)
+  grid-template-columns: repeat(2, 1fr);
+  margin:2vh;
 }
 .top-bar {
   display: flex;
@@ -92,3 +93,12 @@ button{
   width:50%;
   height: 50%;
 }
+ .removeUser{
+   align-self:end;
+   justify-self: end;
+   height:3vh;
+   width: auto;
+   background:red;
+   color: white;
+   box-shadow: none;
+ }
