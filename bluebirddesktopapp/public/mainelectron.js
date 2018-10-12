@@ -13,11 +13,12 @@ const { default: installExtension, REACT_DEVELOPER_TOOLS } = require('electron-d
 
 let mainWindow
 app.on("ready",_=>{
+new Tray(path.join('public', 'trayImages/mainlogo.png'))
 mainWindow= new BrowserWindow({
     height:1500,
     width:1500
 })
-new Tray(path.join('public', 'trayImages/mainlogo.png'))
+
 installExtension(REACT_DEVELOPER_TOOLS)
     .then((name) => console.log(`Added Extension:  ${REACT_DEVELOPER_TOOLS}`))
     .catch((err) => console.log('An error occurred: ', err));
