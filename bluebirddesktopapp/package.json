@@ -1,5 +1,6 @@
 {
   "name": "bluebirddesktopapp",
+  "productName":"Bluebird Heli Tools",
   "version": "0.1.0",
   "private": true,
   "main":"public/mainelectron.js",

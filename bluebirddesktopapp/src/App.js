@@ -195,10 +195,11 @@ class App extends Component {
 				if(window.confirm("Are you sure you want to Delete this User")){
 					this.setState((prevState)=>({
 						production:{
-							...prevState.production,
+						...prevState.production,
 							users:newUserList
 						}
 					}))
+					mainRef.child('users/').set(newUserList);
 				}else{
 					return
 				}
@@ -302,7 +303,7 @@ class App extends Component {
 						}));
 
 						mainRef.child('images').set(newPicUpload);
-						setTimeout(()=>alert("Images uploaded!"),3000)
+						
 					} else {
 						const newPicUpload = {
 							...this.state.production.images[userId],
@@ -322,38 +323,31 @@ class App extends Component {
 							}
 						}));
 						mainRef.child('images').set(newUserImageObj);
-						setTimeout(()=>alert("Images uploaded!"),3000)
 					}
 				})
 			});
+			
 		});
+		setTimeout(()=>alert("Images uploaded!"),3000)
 	};
 
 
 	render() {
 		let mainArea;
-		if (this.state.user !== null && this.state.page === 2) {
+		if (this.state.user !== null && this.state.page === 1) {
 			mainArea = (
 				<div className="mainArea">
-					<div>
+					
 						<UpdateUser
 							addUserDay={this.addUserDay}
 							removeUserDay={this.removeUserDay}
 							removeUser={this.removeUser}
 							users={this.state.production.users}
 						/>{' '}
-					</div>{' '}
+						<AddUser newUser={this.newUser.bind(this)} />
 				</div>
 			);
-		} else if (this.state.user !== null && this.state.page === 1) {
-			mainArea = (
-				<div className="mainArea">
-					<div>
-						<AddUser newUser={this.newUser.bind(this)} />{' '}
-					</div>{' '}
-				</div>
-			);
-		} else if (this.state.user !== null && this.state.page === 3) {
+		}  else if (this.state.user !== null && this.state.page === 2) {
 			mainArea = (
 				<div className="mainArea">
 					<div>

@@ -53,7 +53,11 @@ deleteUser=(event)=>{
          <div className="userBlock">
             <button className="removeUser" onClick={this.deleteUser} value={check[key].email}>Delete User</button>
            <h2>{check[key].email}</h2>
-           <div className={check[key].access==='admin'?'day-counter-admin':'day-counter'}><h3>Access Days</h3><button  onClick={this.removeDay} value={check[key].email}>&lt;</button><h4>{check[key].remainingTrips}</h4><button onClick={this.addDay} value={check[key].email}>&gt;</button></div>
+           <div className={check[key].access==='admin'?'day-counter-admin':'day-counter'}>
+            <h3>Access Days</h3>
+            <button className="userbutton removeDay" onClick={this.removeDay} value={check[key].email}>-</button>
+            <h4>{check[key].remainingTrips}</h4>
+            <button className="userbutton addDay" onClick={this.addDay} value={check[key].email}>+</button></div>
         </div>
        )
      })

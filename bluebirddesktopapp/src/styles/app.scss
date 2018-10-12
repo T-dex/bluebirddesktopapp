@@ -47,6 +47,7 @@ html {
 .mainArea{
   display:grid;
   grid-template-columns: repeat(2, 1fr);
+  grid-gap: 1vh;
   margin:2vh;
 }
 .top-bar {
@@ -74,10 +75,12 @@ html {
 .userBlock{
   border: 1px double black;
   display:grid;
+  height:20vh;
 }
 .day-counter{
   display:flex;
   align-items: center;
+  justify-content: space-evenly;
 }
 .day-counter-admin{
   display:none;
@@ -89,15 +92,26 @@ html {
 
 //Add user areas
 
-button{
-  width:50%;
+.userbutton{
+  width:15%;
   height: 50%;
+  border-radius: 15%;
+  padding:0;
+  border: 0;
+}
+.addDay{
+  background:green;
+  font-size:3vh;
+}
+.removeDay{
+  background: red;
+  text-align: center;
+  font-size:3vh;
 }
  .removeUser{
    align-self:end;
    justify-self: end;
    height:3vh;
-   width: auto;
    background:red;
    color: white;
    box-shadow: none;

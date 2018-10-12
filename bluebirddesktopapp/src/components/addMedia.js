@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Calendar from './calendar'
+import { log } from 'util';
 
 class AddMedia extends Component{
    state={
@@ -17,8 +18,11 @@ uploadFile=(event)=>{
     let userId=this.refs.user.value
     let day= this.state.selectedDay
     const picData={userId, event, day }
-    
+    if(day!='Click here to Select Day'){
    this.props.pictureUpload(picData)
+    }else{
+       alert("Please Select Day!")
+   }
 }
 updateDay=(day)=>{
     this.setState({

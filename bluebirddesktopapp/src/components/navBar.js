@@ -12,20 +12,12 @@ class NavBar extends Component{
             this.props.eventEmitter.emit('landingPage', { page: 1 });
           }}
         >
-          Add User
-        </p>
-        <p
-          className="navigation font"
-          onClick={event => {
-            this.props.eventEmitter.emit('landingPage', { page: 2 });
-          }}
-        >
           Update User
         </p>
         <p
           className="navigation font"
           onClick={event => {
-            this.props.eventEmitter.emit('landingPage', { page: 3 });
+            this.props.eventEmitter.emit('landingPage', { page: 2 });
           }}
         >
           Upload photos
