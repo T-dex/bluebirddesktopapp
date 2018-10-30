@@ -4,7 +4,7 @@
   "description": "",
   "main": "./bluebirddesktopapp/src/mainelectron.js",
   "scripts": {
-    "start": "cd bluebirddesktopapp && npm start && npm run electron"
+    "start": "cd bluebirddesktopapp && npm run electron-dev"
   },
   "repository": {
     "type": "git",
@@ -18,13 +18,14 @@
   },
   "homepage": "https://github.com/T-dex/bluebirddesktopapp#readme",
   "devDependencies": {
+    "electron-builder": "^20.28.4",
     "electron-prebuilt": "^1.4.13",
-    "eslint-plugin-react": "^7.10.0"
+    "eslint-plugin-react": "^7.10.0",
+    "rimraf": "^2.6.2"
   },
   "dependencies": {
     "concurrently": "^3.6.0",
     "electron": "^3.0.3",
-    "electron-builder": "^20.28.4",
     "electron-is-dev": "^0.3.0",
     "jshint": "^2.9.6",
     "wait-on": "^2.1.0"

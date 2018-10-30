@@ -1,12 +1,12 @@
 {
   "name": "bluebirddesktopapp",
-  "productName":"Bluebird Heli Tools",
+  "productName": "Bluebird Heli Tools",
   "version": "0.1.0",
   "private": true,
-  "main":"public/mainelectron.js",
+  "main": "public/electron.js",
+  "homepage": "./",
   "dependencies": {
     "axios": "^0.18.0",
-    "electron-builder": "^20.28.4",
     "firebase": "^5.1.0",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
@@ -15,16 +15,27 @@
   "devDependencies": {
     "concurrently": "^4.0.1",
     "electron": "^2.0.11",
+    "electron-builder": "^20.28.4",
     "electron-devtools-installer": "^2.2.4",
     "react-scripts": "1.1.4",
+    "rimraf": "^2.6.2",
     "wait-on": "^3.1.0"
   },
-  "main": "public/mainelectron.js",
   "scripts": {
+    "preelectron-pack": "npm run build",
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "electron-build":"electron-builder",
+    "build": "react-scripts build && npm run electron-build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "electron-dev": "concurrently \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\""
+  },
+  "build": {
+    "appId": "com.github.T-dex.bluebirddesktopapp",
+    "files": ["build/**/*", "node_modules/**/*", "!build-scripts${/*}"],
+    "forceCodeSigning": true,
+    "directories": {
+      "buildResources": "assets"
+    }
   }
 }

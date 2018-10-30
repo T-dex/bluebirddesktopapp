@@ -7,7 +7,7 @@ import AddMedia from './components/addMedia';
 import UpdateUser from './components/updateUser';
 import NavBar from './components/navBar';
 import './styles/app.css';
-import { log } from 'builder-util';
+
 
 // // let user;
 const rootRef = firebase.database().ref();
@@ -177,13 +177,15 @@ class App extends Component {
 	};
 
 	removeUser=(deleteUser)=>{
-		
+		// eslint-disable-next-line
 		const user=Object.keys(this.state.production.users).filter((key)=>{
 			if(key===deleteUser[0]){
 				console.log(key);
 				let UserKey={...this.state.production.users}
 				let newUserList={}
+				// eslint-disable-next-line
 				let newState= Object.keys(UserKey).filter(user=>{
+					// eslint-disable-next-line
 					if(user!=key){
 					delete UserKey[key]
 					newUserList={...UserKey}
@@ -200,7 +202,9 @@ class App extends Component {
 						}
 					}))
 					mainRef.child('users/').set(newUserList);
+					// eslint-disable-next-line
 				}else{
+					// eslint-disable-next-line
 					return
 				}
 				
@@ -278,7 +282,9 @@ class App extends Component {
 									url: updatedURL[key][refKey]
 								}
 							};
+							// eslint-disable-next-line
 						} else {
+							// eslint-disable-next-line
 							return;
 						}
 						return newObj;

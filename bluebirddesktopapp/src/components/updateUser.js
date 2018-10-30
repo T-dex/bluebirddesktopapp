@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { log } from 'builder-util';
+
 
 
 
@@ -38,6 +38,7 @@ addDay=(event)=>{
  return
 }
 deleteUser=(event)=>{
+  // eslint-disable-next-line
   const deleteUser = Object.keys(data).filter(key=>{
     if(data[key].email===event.target.value){
       return data[key]

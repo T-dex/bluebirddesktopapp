@@ -1,0 +1,13 @@
+directories:
+  output: dist
+  buildResources: assets
+files:
+  - build/**/*
+  - node_modules/**/*
+  - '!build-scripts${/*}'
+extraMetadata:
+  main: build/electron.js
+appId: com.github.T-dex.bluebirddesktopapp
+forceCodeSigning: true
+extends: react-cra
+electronVersion: 2.0.11
